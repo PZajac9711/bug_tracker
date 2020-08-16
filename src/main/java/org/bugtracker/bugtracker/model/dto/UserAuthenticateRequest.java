@@ -1,18 +1,15 @@
 package org.bugtracker.bugtracker.model.dto;
 
-
-public class UserRegistrationRequest {
+public class UserAuthenticateRequest {
     private String login;
     private String password;
-    private String email;
 
-    public UserRegistrationRequest() {
-    }
-
-    public UserRegistrationRequest(String login, String password, String email) {
+    public UserAuthenticateRequest(String login, String password) {
         this.login = login;
         this.password = password;
-        this.email = email;
+    }
+
+    public UserAuthenticateRequest() {
     }
 
     public String getLogin() {
@@ -29,13 +26,5 @@ public class UserRegistrationRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

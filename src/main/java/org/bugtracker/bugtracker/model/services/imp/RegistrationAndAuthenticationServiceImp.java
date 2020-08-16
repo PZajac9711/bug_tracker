@@ -1,24 +1,35 @@
 package org.bugtracker.bugtracker.model.services.imp;
 
+import org.bugtracker.bugtracker.model.dto.TokenResponse;
 import org.bugtracker.bugtracker.model.dto.UserRegistrationRequest;
 import org.bugtracker.bugtracker.model.entities.User;
 import org.bugtracker.bugtracker.model.exceptions.custom.UserRegistrationException;
+import org.bugtracker.bugtracker.model.jwt.JwtGenerate;
 import org.bugtracker.bugtracker.model.repository.UserRepository;
 import org.bugtracker.bugtracker.model.services.RegistrationAndAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.rmi.UnexpectedException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@Service
-public class RegistrationAndAuthenticationServiceImp implements RegistrationAndAuthenticationService {
+//ToDo: need to change active on false and implement email send(but we really need it ?)
+
+@Service(value = "registrationAndAuthentication")
+public class RegistrationAndAuthenticationServiceImp implements RegistrationAndAuthenticationService{
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private JwtGenerate jwtGenerate;
 
     @Autowired
-    public RegistrationAndAuthenticationServiceImp(UserRepository userRepository) {
+    public RegistrationAndAuthenticationServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtGenerate jwtGenerate) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtGenerate = jwtGenerate;
     }
 
     @Override
@@ -42,11 +53,16 @@ public class RegistrationAndAuthenticationServiceImp implements RegistrationAndA
             User user = new User.Builder()
                     .setLogin(userRegistrationRequest.getLogin().toLowerCase())
                     .setEmail(userRegistrationRequest.getEmail().toLowerCase())
-                    .setPassword(userRegistrationRequest.getPassword())
+                    .setPassword(passwordEncoder.encode(userRegistrationRequest.getPassword()))
                     .setCreatedDate(java.time.LocalDateTime.now())
                     .build();
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public TokenResponse generateTokenForUser(String login) {
+        return new TokenResponse(jwtGenerate.generateToken(login));
     }
 
     private boolean checkAllPatterns(UserRegistrationRequest userRegistrationRequest) {
@@ -75,5 +91,15 @@ public class RegistrationAndAuthenticationServiceImp implements RegistrationAndA
             throw new UserRegistrationException("Wrong email");
         }
         return true;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        User user = userRepository.findByLogin(login.toLowerCase());
+        //ToDo: lepsza obsluga i dodac opcionala a nie nulla
+        if(user == null){
+            throw new RuntimeException("No user");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(),new ArrayList<>());
     }
 }

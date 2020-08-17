@@ -32,7 +32,6 @@ public class RegistrationAndAuthenticationController {
     @PostMapping(value = "/authenticate")
     public TokenResponse authenticateUser(@RequestBody UserAuthenticateRequest userAuthenticateRequest){
         UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(userAuthenticateRequest.getLogin(), userAuthenticateRequest.getPassword());
-        //ToDo: obsluzyc wyjatek InternalAuthenticationServiceException jak jest bledny login bo rzuca jak nie ma uzytkownika
         authenticationManager.authenticate(user);
         return registrationAndAuthenticationService.generateTokenForUser(user.getName());
     }

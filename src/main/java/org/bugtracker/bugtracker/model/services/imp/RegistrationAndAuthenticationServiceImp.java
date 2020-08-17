@@ -3,6 +3,7 @@ package org.bugtracker.bugtracker.model.services.imp;
 import org.bugtracker.bugtracker.model.dto.TokenResponse;
 import org.bugtracker.bugtracker.model.dto.UserRegistrationRequest;
 import org.bugtracker.bugtracker.model.entities.User;
+import org.bugtracker.bugtracker.model.exceptions.custom.NoUserException;
 import org.bugtracker.bugtracker.model.exceptions.custom.UserRegistrationException;
 import org.bugtracker.bugtracker.model.jwt.JwtGenerate;
 import org.bugtracker.bugtracker.model.repository.UserRepository;
@@ -98,7 +99,7 @@ public class RegistrationAndAuthenticationServiceImp implements RegistrationAndA
         User user = userRepository.findByLogin(login.toLowerCase());
         //ToDo: lepsza obsluga i dodac opcionala a nie nulla
         if(user == null){
-            throw new RuntimeException("No user");
+            throw new NoUserException("User not exist");
         }
         return new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(),new ArrayList<>());
     }

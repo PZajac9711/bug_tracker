@@ -6,6 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -23,6 +24,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserRegistrationException.class)
     public ResponseEntity<Object> handleUserRegistrationException(UserRegistrationException ex){
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "We can't create user with this credentials", ex);
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<Object> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex){
+        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED,"Error",ex);
         return buildResponseEntity(apiError);
     }
 

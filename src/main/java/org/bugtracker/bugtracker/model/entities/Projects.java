@@ -2,6 +2,7 @@ package org.bugtracker.bugtracker.model.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "projects")
@@ -9,15 +10,17 @@ public class Projects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "projectName")
+    @Column(name = "project_name")
     private String projectName;
     @Column(name = "created_time")
     private LocalDateTime createdTime;
     @Column(name = "owner")
     private String owner;
 
+
     public Projects() {
     }
+
 
     public Long getId() {
         return id;

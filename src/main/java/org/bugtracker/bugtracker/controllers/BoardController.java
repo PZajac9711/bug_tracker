@@ -1,14 +1,24 @@
 package org.bugtracker.bugtracker.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.bugtracker.bugtracker.model.services.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/private")
 public class BoardController {
-    @GetMapping(value = "/getProjects")
-    public String test(){
-        return "Hello?";
+    private BoardService boardService;
+
+    @Autowired
+    public BoardController(BoardService boardService) {
+        this.boardService = boardService;
+    }
+
+    @GetMapping(value = "/createProject")
+    public ResponseEntity<Void> createProject(@RequestHeader(name = "authorization") String token, @RequestParam String boardName){
+        boardService.createNewBoard(token,boardName);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

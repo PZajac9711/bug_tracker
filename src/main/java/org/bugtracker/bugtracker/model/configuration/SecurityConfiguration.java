@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         FilterRegistrationBean<AuthFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new AuthFilter());
         filterRegistrationBean.addUrlPatterns(
-                "/api/private/getProjects"
+                "/api/private/createProject"
         );
         return filterRegistrationBean;
     }

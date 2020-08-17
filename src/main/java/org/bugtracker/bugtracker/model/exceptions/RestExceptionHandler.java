@@ -1,5 +1,6 @@
 package org.bugtracker.bugtracker.model.exceptions;
 
+import org.bugtracker.bugtracker.model.exceptions.custom.BoardAlreadyExistException;
 import org.bugtracker.bugtracker.model.exceptions.custom.UserRegistrationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -30,6 +31,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity<Object> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex){
         ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED,"Error",ex);
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(BoardAlreadyExistException.class)
+    public ResponseEntity<Object> handleBoardAlreadyExistException(BoardAlreadyExistException ex){
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,"Error",ex);
         return buildResponseEntity(apiError);
     }
 

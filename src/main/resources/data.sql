@@ -10,4 +10,4 @@ CREATE TABLE users
     created_time DATETIME NOT NULL
 );
 
-INSERT INTO users(id, login, password, email, activate, created_time) VALUES ( 1,'admin','$2y$10$TspWyG/CpKPYf5xVbyBKC.a1Rm.YeKlKiT5spiP4G.c7kxGHCj/Ba','admin',true,CURRENT_DATE);
+//INSERT INTO users(id, login, password, email, activate, created_time) VALUES ( 1,'admin','$2y$10$TspWyG/CpKPYf5xVbyBKC.a1Rm.YeKlKiT5spiP4G.c7kxGHCj/Ba','admin',true,CURRENT_DATE);

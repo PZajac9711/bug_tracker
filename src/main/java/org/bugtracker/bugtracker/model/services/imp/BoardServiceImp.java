@@ -1,7 +1,9 @@
 package org.bugtracker.bugtracker.model.services.imp;
 
 import org.bugtracker.bugtracker.model.dto.CreateTaskRequest;
+import org.bugtracker.bugtracker.model.dto.SignToMeRequest;
 import org.bugtracker.bugtracker.model.dto.TasksForProjectResponse;
+import org.bugtracker.bugtracker.model.dto.UpdateTaskDetailsRequest;
 import org.bugtracker.bugtracker.model.entities.Membership;
 import org.bugtracker.bugtracker.model.entities.Projects;
 import org.bugtracker.bugtracker.model.entities.Task;
@@ -57,6 +59,7 @@ public class BoardServiceImp implements BoardService {
 
     @Override
     public void createNewTask(String token, CreateTaskRequest createTaskRequest) {
+        //ToDo: zrobic by taski nie mogly sie powtarzac w swoich projektach bo po co miec dwa takie same taski ?
         String userName = jwtRead.getLogin(token);
         Optional<Projects> project = projectsRepository.findByProjectName(createTaskRequest.getBoardName());
         if (!project.isPresent() || project.get().getOwner().equals(userName.toLowerCase())) {
@@ -91,6 +94,44 @@ public class BoardServiceImp implements BoardService {
                 .filter(Task::isApproved)
                 .collect(Collectors.toList());
         return new TasksForProjectResponse(toDo,inProgress,checkMe,approved);
+    }
+
+    @Override
+    public void updateTaskDetails(UpdateTaskDetailsRequest updateTaskDetailsRequest) {
+        //ToDo: sprawdzic czy task i user naleza do tej tablicy
+        //ToDo: wyjatek jak nie bedzie takiego taska jakims cudem
+        Optional<Task> task = taskRepository.findByProjectNameAndTaskDescription(updateTaskDetailsRequest.getProjectName(),updateTaskDetailsRequest.getTaskName());
+        if(!task.isPresent()){
+            System.out.println("empty!");
+            //exception
+        }
+        task.get().setTaskDetails(updateTaskDetailsRequest.getDetails());
+        this.taskRepository.save(task.get());
+    }
+
+    @Override
+    public void assignTaskToMe(SignToMeRequest signToMeRequest, String token) {
+        //ToDo: sprawdzic czy task i user naleza do tej tablicy
+        //ToDo: wyjatek jak nie bedzie takiego taska jakims cudem
+        Optional<Task> task = taskRepository.findByProjectNameAndTaskDescription(signToMeRequest.getProjectName(), signToMeRequest.getTaskName());
+        if(!task.isPresent()){
+            System.out.println("empty!");
+            //exception
+        }
+        task.get().setAssignTo(jwtRead.getLogin(token));
+        taskRepository.save(task.get());
+    }
+
+    @Override
+    public void markAsDone(SignToMeRequest signToMeRequest, String token) {
+        //ToDo: sprawdzic czy rzeczywiscie ten co martkuje jako done jest osoba ktora wykonuje task
+        Optional<Task> task = taskRepository.findByProjectNameAndTaskDescription(signToMeRequest.getProjectName(), signToMeRequest.getTaskName());
+        if(!task.isPresent()){
+            System.out.println("empty!");
+            //exception
+        }
+        task.get().setDone(true);
+        this.taskRepository.save(task.get());
     }
 
     private void addUserToBoard(String userName, String boardName) {

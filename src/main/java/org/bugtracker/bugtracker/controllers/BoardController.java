@@ -1,7 +1,9 @@
 package org.bugtracker.bugtracker.controllers;
 
 import org.bugtracker.bugtracker.model.dto.CreateTaskRequest;
+import org.bugtracker.bugtracker.model.dto.SignToMeRequest;
 import org.bugtracker.bugtracker.model.dto.TasksForProjectResponse;
+import org.bugtracker.bugtracker.model.dto.UpdateTaskDetailsRequest;
 import org.bugtracker.bugtracker.model.entities.Membership;
 import org.bugtracker.bugtracker.model.services.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +40,23 @@ public class BoardController {
     @GetMapping(value = "/getTasks")
     public TasksForProjectResponse getTasks(@RequestParam String boardName, @RequestHeader(name = "authorization") String token){
         return boardService.getTasks(token,boardName);
+    }
+    @PostMapping(value = "/updateTaskDetails")
+    public ResponseEntity<Void> updateDetails(@RequestBody UpdateTaskDetailsRequest updateTaskDetailsRequest){
+        this.boardService.updateTaskDetails(updateTaskDetailsRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping(value = "/signToMe")
+    public ResponseEntity<Void> signTaskToMe(@RequestBody SignToMeRequest signToMeRequest,
+                                             @RequestHeader(name = "authorization") String token){
+        this.boardService.assignTaskToMe(signToMeRequest,token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    //ToDo: trzeba zmienic objekt jaki przyjmujemy, imo to te same wartosci ale lepiej bedzie zrobic extenda na nowa klase
+    @PostMapping(value = "/markAsDone")
+    public ResponseEntity<Void> markAsDone(@RequestBody SignToMeRequest signToMeRequest,
+                                             @RequestHeader(name = "authorization") String token){
+        this.boardService.markAsDone(signToMeRequest, token);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

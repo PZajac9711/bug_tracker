@@ -19,7 +19,7 @@ public class JwtGenerate {
 
         return Jwts.builder()
                 .setSubject("Token")
-                .claim("login",userName)
+                .claim("login",userName.toLowerCase())
                 .setIssuedAt(new Date(currentTime))
                 .setExpiration(new Date(currentTime + JwtConfig.getExpirationTime()))
                 .signWith(signatureAlgorithm, signingKey)

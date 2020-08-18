@@ -48,7 +48,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         filterRegistrationBean.addUrlPatterns(
                 "/api/private/createProject",
                 "/api/private/findAllBoards",
-                "/api/private/addTask"
+                "/api/private/addTask",
+                "/api/private/updateTaskDetails",
+                "/api/private/signToMe",
+                "/api/private/markAsDone"
         );
         return filterRegistrationBean;
     }

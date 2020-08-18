@@ -16,8 +16,18 @@ public class Task {
     private String assignTo;
     private boolean done;
     private boolean approved;
+    @Column(name = "task_details")
+    private String taskDetails;
 
     public Task() {
+    }
+
+    public String getTaskDetails() {
+        return taskDetails;
+    }
+
+    public void setTaskDetails(String taskDetails) {
+        this.taskDetails = taskDetails;
     }
 
     public boolean isApproved() {

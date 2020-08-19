@@ -14,4 +14,12 @@ public class JwtRead {
                 .getBody();
         return claims.get("login").toString();
     }
+    public String getEmailFromResetToken(String token){
+        Claims claims;
+        claims = Jwts.parser()
+                .setSigningKey(JwtConfig.getSecretResetPassword())
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("email").toString();
+    }
 }

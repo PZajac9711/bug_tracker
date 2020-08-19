@@ -25,4 +25,18 @@ public class JwtGenerate {
                 .signWith(signatureAlgorithm, signingKey)
                 .compact();
     }
+    public String generateForgotPasswordToken(String email){
+        long currentTime = System.currentTimeMillis();
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(JwtConfig.getSecretResetPassword());
+        Key signinKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+
+        return Jwts.builder()
+                .setSubject("token")
+                .claim("email",email)
+                .setIssuedAt(new Date(currentTime))
+                .setExpiration(new Date(currentTime + JwtConfig.getExpirationTimeResetPassword()))
+                .signWith(signatureAlgorithm, signinKey)
+                .compact();
+    }
 }

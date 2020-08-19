@@ -57,6 +57,8 @@ public class RegistrationAndAuthenticationServiceImp implements RegistrationAndA
                     .setPassword(passwordEncoder.encode(userRegistrationRequest.getPassword()))
                     .setCreatedDate(java.time.LocalDateTime.now())
                     .build();
+            //ToDo: zmienic na potwierdzenie emailowe
+            user.setActivate(true);
             userRepository.save(user);
         }
     }

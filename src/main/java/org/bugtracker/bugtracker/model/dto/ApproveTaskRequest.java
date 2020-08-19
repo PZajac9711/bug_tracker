@@ -1,12 +1,14 @@
 package org.bugtracker.bugtracker.model.dto;
 
-public class SignToMeRequest {
+public class ApproveTaskRequest {
     private String projectName;
     private String taskName;
+    private boolean approved;
 
-    public SignToMeRequest(String projectName, String taskName) {
+    public ApproveTaskRequest(String projectName, String taskName, boolean approved) {
         this.projectName = projectName;
         this.taskName = taskName;
+        this.approved = approved;
     }
 
     public String getProjectName() {
@@ -25,11 +27,11 @@ public class SignToMeRequest {
         this.taskName = taskName;
     }
 
-    @Override
-    public String toString() {
-        return "SignToMeRequest{" +
-                "projectName='" + projectName + '\'' +
-                ", taskName='" + taskName + '\'' +
-                '}';
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 }

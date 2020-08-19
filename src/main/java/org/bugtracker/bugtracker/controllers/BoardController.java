@@ -1,9 +1,6 @@
 package org.bugtracker.bugtracker.controllers;
 
-import org.bugtracker.bugtracker.model.dto.CreateTaskRequest;
-import org.bugtracker.bugtracker.model.dto.SignToMeRequest;
-import org.bugtracker.bugtracker.model.dto.TasksForProjectResponse;
-import org.bugtracker.bugtracker.model.dto.UpdateTaskDetailsRequest;
+import org.bugtracker.bugtracker.model.dto.*;
 import org.bugtracker.bugtracker.model.entities.Membership;
 import org.bugtracker.bugtracker.model.services.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +54,25 @@ public class BoardController {
     public ResponseEntity<Void> markAsDone(@RequestBody SignToMeRequest signToMeRequest,
                                              @RequestHeader(name = "authorization") String token){
         this.boardService.markAsDone(signToMeRequest, token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping(value = "/approve")
+    public ResponseEntity<Void> approveTask(@RequestBody ApproveTaskRequest approveTaskRequest,
+                                           @RequestHeader(name = "authorization") String token){
+        this.boardService.approveTask(approveTaskRequest,token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping(value = "/assignTaskTo")
+    public ResponseEntity<Void> assignTaskTo(@RequestBody SignToMeRequest signToMeRequest,
+                                             @RequestHeader(name = "authorization") String token,
+                                             @RequestParam String toUserName){
+        this.boardService.assignTaskTo(signToMeRequest,token,toUserName);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping(value = "/addUser")
+    public ResponseEntity<Void> addUserToProject(@RequestBody AddUserRequest addUserRequest,
+                                                 @RequestHeader(name = "authorization") String token){
+        this.boardService.addUserToProject(addUserRequest,token);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

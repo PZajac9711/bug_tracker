@@ -51,7 +51,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 "/api/private/addTask",
                 "/api/private/updateTaskDetails",
                 "/api/private/signToMe",
-                "/api/private/markAsDone"
+                "/api/private/markAsDone",
+                "/api/private/approve",
+                "/api/private/assignTaskTo"
         );
         return filterRegistrationBean;
     }

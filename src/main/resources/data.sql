@@ -22,7 +22,8 @@ CREATE TABLE membership(
     login VARCHAR(100) NOT NULL,
     project_name VARCHAR(20) NOT NULL,
     role VARCHAR(100) NOT NULL,
-    FOREIGN KEY(project_name) REFERENCES projects(project_name)
+    FOREIGN KEY(project_name) REFERENCES projects(project_name),
+    FOREIGN KEY(login) REFERENCES users(login)
 );
 CREATE TABLE tasks(
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,

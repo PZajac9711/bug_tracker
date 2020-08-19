@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 //ToDo: need to change active on false and implement email send(but we really need it ?)
@@ -98,11 +99,11 @@ public class RegistrationAndAuthenticationServiceImp implements RegistrationAndA
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(login.toLowerCase());
+        Optional<User> user = userRepository.findByLogin(login.toLowerCase());
         //ToDo: lepsza obsluga i dodac opcionala a nie nulla
-        if(user == null){
+        if(!user.isPresent()){
             throw new NoUserException("User not exist");
         }
-        return new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(),new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(user.get().getLogin(),user.get().getPassword(),new ArrayList<>());
     }
 }

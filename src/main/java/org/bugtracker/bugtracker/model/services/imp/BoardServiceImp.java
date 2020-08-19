@@ -10,6 +10,7 @@ import org.bugtracker.bugtracker.model.jwt.JwtRead;
 import org.bugtracker.bugtracker.model.repository.MembershipRepository;
 import org.bugtracker.bugtracker.model.repository.ProjectsRepository;
 import org.bugtracker.bugtracker.model.repository.TaskRepository;
+import org.bugtracker.bugtracker.model.repository.UserRepository;
 import org.bugtracker.bugtracker.model.services.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,13 +26,15 @@ public class BoardServiceImp implements BoardService {
     private MembershipRepository membershipRepository;
     private TaskRepository taskRepository;
     private JwtRead jwtRead;
+    private UserRepository userRepository;
 
     @Autowired
-    public BoardServiceImp(ProjectsRepository projectsRepository, MembershipRepository membershipRepository, TaskRepository taskRepository, JwtRead jwtRead) {
+    public BoardServiceImp(ProjectsRepository projectsRepository, MembershipRepository membershipRepository, TaskRepository taskRepository, JwtRead jwtRead, UserRepository userRepository) {
         this.projectsRepository = projectsRepository;
         this.membershipRepository = membershipRepository;
         this.taskRepository = taskRepository;
         this.jwtRead = jwtRead;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -163,6 +166,12 @@ public class BoardServiceImp implements BoardService {
         if (!task.isPresent() || !project.get().getOwner().equals(jwtRead.getLogin(token))) {
             throw new TaskException("You can't assign tasks");
         }
+        if(!userRepository.findByLogin(toUserName.toLowerCase()).isPresent()){
+            throw new TaskException("User not exists");
+        }
+        if(!membershipRepository.findByLoginAndProjectName(toUserName.toLowerCase(), assignTo.getProjectName()).isPresent()){
+            throw new TaskException("User is not a member");
+        }
         task.get().setAssignTo(toUserName);
         taskRepository.save(task.get());
     }
@@ -177,6 +186,9 @@ public class BoardServiceImp implements BoardService {
         }
         if(membershipRepository.findByLoginAndProjectName(addUserRequest.getUserName().toLowerCase(),addUserRequest.getProjectName()).isPresent()){
             throw new TaskException("User already is a member");
+        }
+        if(!userRepository.findByLogin(addUserRequest.getUserName().toLowerCase()).isPresent()){
+            throw new TaskException("User not exists");
         }
         Membership membership = new Membership.Builder()
                 .setLogin(addUserRequest.getUserName())

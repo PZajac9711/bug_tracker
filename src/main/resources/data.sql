@@ -34,13 +34,3 @@ CREATE TABLE tasks(
     approved boolean default false,
     task_details VARCHAR(350)
 );
-INSERT INTO users(login, password, email, activate, created_time) VALUES ('admin','$2y$10$TspWyG/CpKPYf5xVbyBKC.a1Rm.YeKlKiT5spiP4G.c7kxGHCj/Ba','patzaj9711@gmail.com',true,CURRENT_DATE);
-INSERT INTO users(login, password, email, activate, created_time) VALUES ('adam','$2y$10$TspWyG/CpKPYf5xVbyBKC.a1Rm.YeKlKiT5spiP4G.c7kxGHCj/Ba','adam',true,CURRENT_DATE);
-INSERT INTO projects(project_name, created_time, owner) VALUES ( 'hello',CURRENT_DATE,'admin');
-INSERT INTO membership(login, project_name, role) VALUES ( 'admin','hello','not implemented' );
-INSERT INTO membership(login, project_name, role) VALUES ( 'adam','hello','not implemented' );
-INSERT INTO tasks(task_description, project_name,task_details) VALUES ( 'task1','hello','details about task1');
-INSERT INTO tasks(task_description, project_name) VALUES ( 'task2','hello');
-INSERT INTO tasks(task_description, project_name, assign_to) VALUES ( 'task3','hello', 'admin');
-INSERT INTO tasks(task_description, project_name, assign_to,done) VALUES ( 'task4','hello', 'admin',true);
-INSERT INTO tasks(task_description, project_name, assign_to,done,approved) VALUES ( 'task5','hello', 'admin',true,true);

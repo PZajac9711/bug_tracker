@@ -47,7 +47,6 @@ public class AuthFilter implements Filter {
             }
         }
         catch (NullPointerException e){
-            //tutaj wali nulla
             logger.error(e.getMessage());
             httpServletResponse.setStatus(400);
         }

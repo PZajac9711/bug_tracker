@@ -23,4 +23,8 @@ public class UserController {
         userService.resetPassword(resetPasswordRequest.getToken(),resetPasswordRequest.getPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @GetMapping(value = "/start")
+    public ResponseEntity<Void> notice(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
